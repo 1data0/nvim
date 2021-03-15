@@ -41,9 +41,10 @@ let g:which_key_map.g = {'Git' : '+git'}
 let g:which_key_map.g.s = 'Git Status'
 nnoremap <leader>gs :Gstatus<CR>
 let g:which_key_map.g.p = 'Git Push'
-nnoremap <leader>gp :Gpush<CR>
+nnoremap <leader>gp :Git push<CR>
 let g:which_key_map.g.o = 'Git Open File'
-nnoremap <Leader>go :lua require'telescope.builtin'.git_files(require('telescope.themes').get_dropdown({}))<cr>
+" nnoremap <Leader>go :lua require'telescope.builtin'.git_files(require('telescope.themes').get_dropdown({}))<cr>
+nnoremap <Leader>go :GFiles<CR>
 let g:which_key_map.g.d = 'Git Diff'
 nnoremap <leader>gd :Gvdiffsplit!<CR>
 
@@ -65,12 +66,18 @@ nnoremap <leader>s :setlocal spell!<CR>
 let g:which_key_map.w = 'Close Buffer'
 nnoremap <leader>w :bd<CR>
 
+let g:which_key_map.q = 'Quit Nvim'
+nnoremap <leader>q :q<CR>
+
 let g:which_key_map.f = 'Fullscreen'
 nnoremap <leader>f :tabnew %<CR>
 
+let g:which_key_map.o = 'Open file'
+nnoremap <leader>o :Files ./<CR>
+
 let g:which_key_map.H = 'Comment header'
 nnoremap <leader>H :Header<CR>
-nnoremap <leader>q :Pydoc<CR>
+" nnoremap <leader>q :Pydoc<CR>
 
 let g:which_key_map.h = 'Move Left'
 nnoremap <leader>h <C-w>h
@@ -82,14 +89,16 @@ let g:which_key_map.l = 'Move Right'
 nnoremap <leader>l <C-w>l
 
 " nnoremap <leader><space> :Buffers<CR> 
-nnoremap <Leader><leader> :lua require'telescope.builtin'.buffers(require('telescope.themes'))<cr>
+" nnoremap <Leader><leader> :lua require'telescope.builtin'.buffers(require('telescope.themes'))<cr>
+nnoremap <Leader><leader> :Buffers<CR>
 
 let g:which_key_map.L = {'Lint':'+lint'}
 let g:which_key_map.L.p = 'python'
 nnoremap <leader>Lp :w<CR>:set makeprg=pylama\ %<CR>:silent! make<CR>:cw<CR>:cfirst<CR>
 let g:which_key_map.L.c = 'cloudformation'
-nnoremap <leader>Lc :w<CR>:set makeprg=cfn-lint\ %<CR>:silent! make<CR>:echo "Linting"<CR>:cw<CR>:cfirst<CR>
-
+nnoremap <leader>Lc :w<CR>:set makeprg=cfn-lint<CR>:Make! %<CR>:cfirst<CR>
+let g:which_key_map.e = 'QuickFix List'
+nnoremap <leader>e :Copen!<CR>
 nnoremap <leader>zp V3jp:w<CR>
 
 " cmap <c-p> <Plug>CmdlineCompleteBackward
