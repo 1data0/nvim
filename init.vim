@@ -8,10 +8,11 @@ source $HOME/.config/nvim/mappings.vim
 
 " ::::::::::::::::::::::::::::::::::( LSP )::::::::::::::::::::::::::::::::::::
 "
-lua require'lspconfig'.pyls.setup{ on_attach=require'completion'.on_attach }
+lua require'lspconfig'.pyright.setup{ on_attach=require'completion'.on_attach }
 lua require'lspconfig'.vimls.setup{on_attach=require'completion'.on_attach}
-" lua require'lspconfig'.denols.setup{on_attach=require'completion'.on_attach}
+lua require'lspconfig'.denols.setup{on_attach=require'completion'.on_attach}
 lua require'lspconfig'.tsserver.setup{on_attach=require'completion'.on_attach}
+lua require'lspconfig'.gopls.setup{on_attach=require'completion'.on_attach}
 
 " ::::::::::::::::::::::::::::::( Status line )::::::::::::::::::::::::::::::::
 
@@ -24,7 +25,7 @@ require'nvim-treesitter.configs'.setup {
   ensure_installed = "maintained", -- one of "all", "maintained" (parsers with maintainers), or a list of languages
   highlight = {
     enable = true,              -- false will disable the whole extension
-    disable = { "c", "rust" },  -- list of language that will be disabled
+    disable = {},  -- list of language that will be disabled
   },
 }
 EOF

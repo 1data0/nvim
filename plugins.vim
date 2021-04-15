@@ -57,6 +57,8 @@ Plug 'tpope/vim-rhubarb'
 Plug 'tpope/vim-surround'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
+Plug 'vim-test/vim-test'
+Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
 call plug#end()
  
 " :::::::::::::::::::::::::::::::::( Theme ):::::::::::::::::::::::::::::::::::

@@ -101,6 +101,7 @@ let g:which_key_map.e = 'QuickFix List'
 nnoremap <leader>e :Copen!<CR>
 nnoremap <leader>zp V3jp:w<CR>
 
+nnoremap <leader>Ls :w<CR>:set makeprg=shellcheck<CR>:Make! %<CR>:cfirst<CR>
 " cmap <c-p> <Plug>CmdlineCompleteBackward
 " cmap <c-n> <Plug>CmdlineCompleteForward
 
@@ -114,3 +115,41 @@ nnoremap <leader>zp V3jp:w<CR>
 	" imap <c-f>  <Plug>(deoppet_jump_forward)     <Plug>(neosnippet_expand_target)
 
 " inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
+
+
+lua << EOF
+function kitty_picker()
+    local previewers = require('telescope.previewers')
+    local pickers = require('telescope.pickers')
+    local sorters = require('telescope.sorters')
+    local finders = require('telescope.finders')
+    local socket = finders.new_oneshot_job({'ls', '/tmp/kitty_socket*'})
+    for k,v in pairs(socket) do
+        print(k,v)
+    end
+    pickers.new {
+      results_title = 'Projects',
+      -- Run an external command and show the results in the finder window
+      finder = finders.new_oneshot_job({'kitty', '@', '--to=unix:' .. socket, 'ls'}),
+      sorter = sorters.get_fuzzy_file(),
+      previewer = previewers.new_termopen_previewer {
+        -- Execute another command using the highlighted entry
+        get_command = function(entry)
+          return {'echo', entry.value}
+        end
+      },
+    }:find()
+end
+EOF
+nnoremap <Leader>tt :lua kitty_picker()<CR>
+" List=$(/usr/local/bin/kitty @ --to=unix:$(ls /tmp/kitty_socket*) ls | /usr/local/bin/jq '.[].tabs[].title' | /usr/bin/sed 's/"//g' | tr '\n' ' ')
+" if [[ $List =~ $query ]]; then
+"     echo "Switching tab $query"
+" 	/usr/local/bin/kitty @ --to=unix:$(ls /tmp/kitty_socket*) focus-tab --match title:"$(echo $query | tr ' ' '\ ')"
+" else
+"     echo "Creating tab $query $List"
+" 	/usr/local/bin/kitty @ --to=unix:$(ls /tmp/kitty_socket*) launch --type=tab --tab-title "$(echo $query | tr ' ' '\ ')"
+"     /bin/sleep 1
+"     /usr/local/bin/kitty @ --to=unix:$(ls /tmp/kitty_socket*) send-text --match-tab title:"$(echo $query | tr ' ' '\ ')" "cd /Users/jamesphillips/git/$query && clear && vimg\n"
+" fi
+
