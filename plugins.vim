@@ -24,7 +24,7 @@ call plug#begin()
 " Plug 'tjdevries/express_line.nvim'
 " Plug 'vim-python/python-syntax'
 Plug 'Badacadabra/vim-archery'
-Plug 'Raimondi/delimitMate'
+" Plug 'Raimondi/delimitMate'
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 Plug 'Shougo/deoppet.nvim', { 'do': ':UpdateRemotePlugins' }
 Plug 'Shougo/neosnippet-snippets'

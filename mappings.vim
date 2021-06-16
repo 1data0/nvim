@@ -41,7 +41,7 @@ let g:which_key_map.g = {'Git' : '+git'}
 let g:which_key_map.g.s = 'Git Status'
 nnoremap <leader>gs :Gstatus<CR>
 let g:which_key_map.g.p = 'Git Push'
-nnoremap <leader>gp :Git push<CR>
+nnoremap <leader>gp :Git -c push.default=current push<CR>
 let g:which_key_map.g.o = 'Git Open File'
 " nnoremap <Leader>go :lua require'telescope.builtin'.git_files(require('telescope.themes').get_dropdown({}))<cr>
 nnoremap <Leader>go :GFiles<CR>
