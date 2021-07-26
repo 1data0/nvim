@@ -4,12 +4,19 @@
 let g:mapleader = "\<Space>"
 let g:maplocalleader = ','
 call which_key#register('<Space>', "g:which_key_map")
+
+" ::::::::::::::::::::::::::::( Completion keys )::::::::::::::::::::::::::::::
 nnoremap <silent> <leader>      :<c-u>WhichKey '<Space>'<CR>
 nnoremap <silent> <localleader> :<c-u>WhichKey  ','<CR>
+imap <tab> <Plug>(completion_smart_tab)
+imap <s-tab> <Plug>(completion_smart_s_tab)
+
 let g:which_key_timeout = 1
 let g:which_key_map =  {}
 
-
+" Use <Tab> and <S-Tab> to navigate through popup menu
+inoremap <expr> <Tab>   pumvisible() ? "\<C-n>" : "\<Tab>"
+inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 
 
 nnoremap <leader>x :close<CR>
@@ -38,19 +45,19 @@ let g:which_key_map.b = {
 
 
 let g:which_key_map.g = {'Git' : '+git'}
-let g:which_key_map.g.s = 'Git Status'
-nnoremap <leader>gs :Gstatus<CR>
+" let g:which_key_map.g.s = 'Git Status'
+" nnoremap <leader>gs :Gstatus<CR>
 let g:which_key_map.g.p = 'Git Push'
 nnoremap <leader>gp :Git -c push.default=current push<CR>
 let g:which_key_map.g.o = 'Git Open File'
-" nnoremap <Leader>go :lua require'telescope.builtin'.git_files(require('telescope.themes').get_dropdown({}))<cr>
-nnoremap <Leader>go :GFiles<CR>
+nnoremap <Leader>go :lua require('telescope.builtin').git_files()<cr>
+" nnoremap <Leader>go :GFiles<CR>
 let g:which_key_map.g.d = 'Git Diff'
 nnoremap <leader>gd :Gvdiffsplit!<CR>
 
 
 nnoremap <leader>sh i#!/bin/bash<CR>
-nnoremap <leader>c :e ~/.config/nvim/init.vim<CR>
+nnoremap <leader>c :e ~/.config/nvim/init.lua<CR>
 " nnoremap <leader>r :Rg<CR>
 nnoremap <leader>r :%s/<C-r><C-w>/
 " nnoremap <leader>o :FzfPreviewProjectFiles<CR>
@@ -73,7 +80,9 @@ let g:which_key_map.f = 'Fullscreen'
 nnoremap <leader>f :tabnew %<CR>
 
 let g:which_key_map.o = 'Open file'
-nnoremap <leader>o :Files ./<CR>
+" nnoremap <leader>o :Files ./<CR>
+nnoremap <leader>o :lua require('telescope.builtin').find_files()<CR>
+nnoremap <leader>G :lua require('telescope.builtin').live_grep()<CR>
 
 let g:which_key_map.H = 'Comment header'
 nnoremap <leader>H :Header<CR>
@@ -89,8 +98,8 @@ let g:which_key_map.l = 'Move Right'
 nnoremap <leader>l <C-w>l
 
 " nnoremap <leader><space> :Buffers<CR> 
-" nnoremap <Leader><leader> :lua require'telescope.builtin'.buffers(require('telescope.themes'))<cr>
-nnoremap <Leader><leader> :Buffers<CR>
+nnoremap <Leader><leader> :lua require('telescope.builtin').buffers()<cr>
+" nnoremap <Leader><leader> :Buffers<CR>
 
 let g:which_key_map.L = {'Lint':'+lint'}
 let g:which_key_map.L.p = 'python'
