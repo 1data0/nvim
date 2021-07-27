@@ -14,7 +14,7 @@ function! s:header_wrap() abort
     if s:mod(l:width, 2)
         let l:end = 0
     endif
-    let l:margin = l:width / 2-2
+    let l:margin = l:width / 2-3
     exec "norm " .l:margin. "I:"
     exec "norm a( "
     exec "norm A )"
@@ -23,6 +23,9 @@ function! s:header_wrap() abort
         exec "norm $x"
     endif
     exec "norm 0xxVgc"
+    let l:size = strwidth(getline('.'))
+    let l:add = 80 - l:size -1
+    exec "norm " .l:add. "A:"
 endfunction
 
 command! Header call s:header_wrap()
