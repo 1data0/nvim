@@ -5,6 +5,7 @@ local Cmd = vim.cmd
 local Fn = vim.fn
 local Api = vim.api
 local U = {}
+local Job = require('plenary.job')
 
 cfg = '$HOME/.config/nvim/'
 function load (file)
@@ -17,6 +18,16 @@ local install_path = Fn.stdpath('data')..'/site/pack/packer/start/packer.nvim'
 if Fn.empty(Fn.glob(install_path)) > 0 then
   Fn.system({'git', 'clone', 'https://github.com/wbthomason/packer.nvim', install_path})
   Cmd 'packadd packer.nvim'
+end
+
+function _G.test1()
+    local job = Job:new({
+    command = 'echo',
+    args = { 'hi' },
+    on_stdout = function(j, results)
+        print(results)
+    end,
+    }):sync()
 end
 
 --::::::::::::::::::::::::::::::::( Plugins )::::::::::::::::::::::::::::::::::
@@ -40,7 +51,8 @@ packer.startup(function()
   use 'neovim/nvim-lspconfig'
   use 'williamboman/nvim-lsp-installer'
   use 'ray-x/lsp_signature.nvim'
-  use 'nvim-lua/completion-nvim' 
+  -- use 'nvim-lua/completion-nvim' 
+  use 'hrsh7th/nvim-compe'
   use 'nvim-lua/plenary.nvim'
   use 'nvim-lua/popup.nvim'
   use 'nvim-telescope/telescope.nvim'
@@ -123,17 +135,32 @@ Cmd 'set shortmess+=c'
 G.mapleader = ' '
 G.maplocalleader = ','
 
+-- local function escape_seq(str)
+--     -- Adjust boolean arguments as needed
+--     return vim.api.nvim_replace_termcodes(str, true, true, true)
+-- end
+
+-- function _G.smart_tab()
+--     return vim.fn.pumvisible() == 1 and escape_seq('<C-n>') or escape_seq('<Tab>')
+-- end
+
+-- function _G.s_smart_tab()
+--     return vim.fn.pumvisible() == 1 and escape_seq('<C-n>') or escape_seq('<S-Tab>')
+-- end
+
 -- completion-nvim mappings
-Cmd('imap <tab> <Plug>(completion_smart_tab)')
-Cmd('imap <s-tab> <Plug>(completion_smart_s_tab)')
+-- Cmd('imap <tab> <Plug>(completion_smart_tab)')
+-- Cmd('imap <s-tab> <Plug>(completion_smart_s_tab)')
+-- Cmd 'inoremap <expr> <C-j> pumvisible() ? "\\<C-n>" : "\\<C-j>"'
+-- Cmd 'inoremap <expr> <C-k> pumvisible() ? "\\<C-p>" : "\\<C-k>"'
 -- Cmd('inoremap <expr> <Tab>   pumvisible() ? "<C-n>" : "<Tab>"')
 -- Cmd('inoremap <expr> <S-Tab> pumvisible() ? "<C-p>" : "<S-Tab>"')
 local wk = require("which-key")
 -- wk.register({
 --     ["<tab>"] = { "<Plug>(completion_smart_tab)", mode="i"},
 --     ["<s-tab>"] = { "<Plug>(completion_smart_s_tab)", mode="i"},
---     ["<expr> <Tab>"] = { 'pumvisible() ? "<C-n>" : "<Tab>"', mode="i"},
---     ["<expr> <S-Tab>"] = { 'pumvisible() ? "<C-p>" : "<S-Tab>"', mode="i",}
+--     ["<Tab>"] = { _G.smart_tab, mode="i", expr=true},
+--     ["<S-Tab>"] = { _G.s_smart_tab, mode="i", expr=true}
 -- })
 wk.register({
   ["<leader>"] = { function() require('telescope.builtin').buffers() end, "Switch buffers"},
@@ -141,11 +168,13 @@ wk.register({
   ["<leader>l"] = { "<C-w>l", "Move right pane"},
   ["<leader>j"] = { "<C-w>j", "Move down pane"},
   ["<leader>k"] = { "<C-w>k", "Move up pane"},
-  ["s"] = { "<cmd> setlocal spell!", "Spellcheck"},
+  ["s"] = { "<cmd> setlocal spell!<CR>", "Spellcheck"},
   ["w"] = { "<cmd>bd<CR>", "Close buffer"},
   ["q"] = { "<cmd>q<CR>", "Quit Nvim"},
   ['"'] = { '$F"ci"', 'Change in last "'},
   ["'"] = { '0ci"', 'Change in first "'},
+  ["J"] = { "<cmd>m '>+1<CR>gv=gv>", 'Change in first "', mode = "v"},
+  ["t"] = { _G.test1, 'lua test"'},
   ["e"] = { function() vim.lsp.diagnostic.set_loclist() end, 'Open diagnostic quickfix list.'},
   ["n"] = { function() vim.lsp.diagnostic.goto_next() end, 'Move to next diagnostic item.'},
   ["H"] = { "<cmd>Header<CR>", "Create heading"},  
@@ -184,12 +213,11 @@ require'nvim-treesitter.configs'.setup {
   },
 }
 
-
-require'lspconfig'.pyright.setup{on_attach=require('completion').on_attach }
-require'lspconfig'.vimls.setup{on_attach=require('completion').on_attach}
-require'lspconfig'.denols.setup{on_attach=require('completion').on_attach}
-require'lspconfig'.tsserver.setup{on_attach=require('completion').on_attach}
-require'lspconfig'.gopls.setup{on_attach=require('completion').on_attach}
+require'lspconfig'.pyright.setup{on_attach=require('compe').on_attach }
+require'lspconfig'.vimls.setup{on_attach=require('compe').on_attach}
+require'lspconfig'.denols.setup{on_attach=require('compe').on_attach}
+require'lspconfig'.tsserver.setup{on_attach=require('compe').on_attach}
+require'lspconfig'.gopls.setup{on_attach=require('compe').on_attach}
 
 vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
   vim.lsp.diagnostic.on_publish_diagnostics, {
@@ -216,6 +244,78 @@ vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
   }
 )
 
+require('compe').setup {
+  enabled = true;
+  autocomplete = true;
+  debug = false;
+  min_length = 1;
+  preselect = 'enable';
+  throttle_time = 80;
+  source_timeout = 200;
+  resolve_timeout = 800;
+  incomplete_delay = 400;
+  max_abbr_width = 100;
+  max_kind_width = 100;
+  max_menu_width = 100;
+  documentation = {
+    border = { '', '' ,'', ' ', '', '', '', ' ' }, -- the border option is the same as `|help nvim_open_win|`
+    winhighlight = "NormalFloat:CompeDocumentation,FloatBorder:CompeDocumentationBorder",
+    max_width = 120,
+    min_width = 60,
+    max_height = math.floor(vim.o.lines * 0.3),
+    min_height = 1,
+  };
+
+  source = {
+    path = true;
+    buffer = true;
+    calc = true;
+    nvim_lsp = true;
+    nvim_lua = true;
+    vsnip = true;
+    ultisnips = true;
+    luasnip = true;
+  };
+}
+local t = function(str)
+  return vim.api.nvim_replace_termcodes(str, true, true, true)
+end
+
+local check_back_space = function()
+    local col = vim.fn.col('.') - 1
+    return col == 0 or vim.fn.getline('.'):sub(col, col):match('%s') ~= nil
+end
+
+-- Use (s-)tab to:
+--- move to prev/next item in completion menuone
+--- jump to prev/next snippet's placeholder
+_G.tab_complete = function()
+  if vim.fn.pumvisible() == 1 then
+    return t "<C-n>"
+  elseif vim.fn['vsnip#available'](1) == 1 then
+    return t "<Plug>(vsnip-expand-or-jump)"
+  elseif check_back_space() then
+    return t "<Tab>"
+  else
+    return vim.fn['compe#complete']()
+  end
+end
+_G.s_tab_complete = function()
+  if vim.fn.pumvisible() == 1 then
+    return t "<C-p>"
+  elseif vim.fn['vsnip#jumpable'](-1) == 1 then
+    return t "<Plug>(vsnip-jump-prev)"
+  else
+    -- If <S-Tab> is not working in your terminal, change it to <C-h>
+    return t "<S-Tab>"
+  end
+end
+
+Api.nvim_set_keymap("i", "<Tab>", "v:lua.tab_complete()", {expr = true})
+Api.nvim_set_keymap("s", "<Tab>", "v:lua.tab_complete()", {expr = true})
+Api.nvim_set_keymap("i", "<S-Tab>", "v:lua.s_tab_complete()", {expr = true})
+Api.nvim_set_keymap("s", "<S-Tab>", "v:lua.s_tab_complete()", {expr = true})
+
 G.startify_change_to_vcs_root = 1
 G.startify_enable_special = 0
 -- G.startify_custom_header = { 
@@ -229,7 +329,6 @@ G.startify_enable_special = 0
 
 Cmd([[
 augroup MYAUTO
-    autocmd BufEnter * lua require('completion').on_attach()
     autocmd BufWritePost init.lua source $MYVIMRC
     autocmd FileType *.python setlocal tabstop=4 shiftwidth=4 softtabstop=4 expandtab
     autocmd BufNewFile,BufReadPost *.{yaml,yml} set filetype=yaml
