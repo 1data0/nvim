@@ -87,7 +87,7 @@ load("functions.vim")
 
 --::::::::::::::::::::::::::::( Editors options )::::::::::::::::::::::::::::::
 O.undofile = true
-O.undodir = '~/.config/vim-persisted-undo/'
+O.undodir = '.config/vim-persisted-undo/'
 O.autoread = true
 O.autoindent = true
 O.clipboard:append { 'unnamedplus' }
@@ -107,7 +107,7 @@ O.wrap = true
 O.number = true
 O.path:append { '**' }
 O.relativenumber = true
-O.rtp:append { '~/.config/nvim/plugged/fzf' }
+-- O.rtp:append { '~/.config/nvim/plugged/fzf' }
 O.scrolloff = 10
 O.shiftwidth = 4 
 O.shortmess = 'I' --Disable startup message
@@ -191,9 +191,10 @@ wk.register({
     name = "Git",
     s = { "<cmd>Git<CR>", "Status" },
     p = { "<cmd>Git -c push.default=current push<CR>", "Push" },
-    P = { "<cmd>Git Pull<CR>", "Pull" },
+    P = { "<cmd>Git pull<CR>", "Pull" },
     o = { function() require('telescope.builtin').git_files() end, "Open file from repo"},
-    d = { "<cmd>Gvdiffsplit<CR>", "diff" }
+    d = { "<cmd>Gvdiffsplit<CR>", "Diff" },
+    r = { "<cmd>!$(echo \"git branch --set-upstream-to=origin/$(git branch --show-current) $(git branch --show-current)\") && git pull<CR>", "Set remote" }
   },
   p = {
     h = { "<cmd>ggI#!/usr/bin/env python3<CR>", "Add python shbang"},
@@ -218,6 +219,12 @@ require'lspconfig'.vimls.setup{on_attach=require('compe').on_attach}
 require'lspconfig'.denols.setup{on_attach=require('compe').on_attach}
 require'lspconfig'.tsserver.setup{on_attach=require('compe').on_attach}
 require'lspconfig'.gopls.setup{on_attach=require('compe').on_attach}
+
+require'lspconfig'.pyright.setup({
+    before_init = function(_, config)
+        config.settings.python.pythonPath = {"../../"}
+    end
+})
 
 vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
   vim.lsp.diagnostic.on_publish_diagnostics, {
