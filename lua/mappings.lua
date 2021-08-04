@@ -75,10 +75,14 @@ wk.register({
         end,
         'Move to next diagnostic item.'
     },
-    ["H"] = {
-        "<cmd>Header<CR>",
-        "Create heading"
-    },  
+    ["h"] = {
+        "<cmd>header<cr>",
+        "create heading"
+    },
+    ["c"] = {
+        "<cmd>e ~/.config/nvim/init.lua<cr>",
+        "Edit config"
+    },
     f = {
         name = "File", -- optional group name
         f = {
