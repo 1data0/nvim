@@ -14,7 +14,7 @@ augroup MYAUTO
     autocmd TermOpen * setlocal nonumber norelativenumber
     autocmd TermOpen term://* startinsert
     autocmd BufWritePost *.py Make lint
-
+    autocmd TermClose * call feedkeys("<CR>")
 augroup END
 augroup highlight_yank
     autocmd!

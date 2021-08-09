@@ -1,11 +1,10 @@
 --::::::::::::::::::( Auto install packer if not installed ):::::::::::::::::::
-local Cmd = vim.cmd
-local Fn = vim.fn
-local install_path = Fn.stdpath('data')..'/site/pack/packer/start/packer.nvim'
+U = require('utils')
+local install_path = U.fn.stdpath('data')..'/site/pack/packer/start/packer.nvim'
 
-if Fn.empty(Fn.glob(install_path)) > 0 then
-  Fn.system({'git', 'clone', 'https://github.com/wbthomason/packer.nvim', install_path})
-  Cmd 'packadd packer.nvim'
+if U.fn.empty(U.fn.glob(install_path)) > 0 then
+  U.fn.system({'git', 'clone', 'https://github.com/wbthomason/packer.nvim', install_path})
+  U.c('packadd packer.nvim')
 end
 --::::::::::::::::::::::::::::::::( Plugins )::::::::::::::::::::::::::::::::::
 packer = require('packer')
@@ -14,8 +13,8 @@ packer.startup(function()
 -- use 'airblade/vim-rooter'
 -- use 'mhinz/vim-signify'
 -- use 'tjdevries/express_line.nvim'
--- use 'vim-python/python-syntax'
-  use 'ap/vim-css-color'
+use 'vim-python/python-syntax'
+  -- use 'ap/vim-css-color'
 -- use 'cakebaker/scss-syntax.vim'
 -- use 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
 -- use 'hashivim/vim-terraform'
@@ -52,4 +51,10 @@ packer.startup(function()
 -- use 'arcticicestudio/nord-vim'
 -- use 'Badacadabra/vim-archery'
   use 'morhetz/gruvbox'
+  use 'tjdevries/colorbuddy.vim'
+  use 'tjdevries/gruvbuddy.nvim'
+  use 'joshdick/onedark.vim'
+  use 'sainnhe/everforest'
 end)
+
+U.colorscheme('onedark')

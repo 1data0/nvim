@@ -6,6 +6,7 @@ U = require('utils')
 U.o.shell = '/bin/bash'
 U.o.autoindent = true
 U.o.autoread = true
+U.o.background = "dark"
 U.o.clipboard:append { 'unnamedplus' }
 U.o.cmdheight = 1
 U.o.completeopt = 'menuone,noinsert,noselect'
@@ -29,9 +30,11 @@ U.o.signcolumn = 'yes'
 U.o.smartindent = true
 U.o.softtabstop = 4
 U.o.splitbelow = true
+U.o.splitright = true
 U.o.sts = 4
 U.o.tabstop = 4 
 U.o.timeoutlen = 250
+U.o.termguicolors = true
 U.o.undodir = U.home .. '/.config/vim-persisted-undo/'
 U.o.undofile = true
 U.o.wrap = true
@@ -43,3 +46,5 @@ for i = 80,300,1
 	do table.insert(tmp,i) 
 end     
 U.ol.colorcolumn = tmp
+U.c("let g:fzf_layout = { 'down':  '40%'}")
+

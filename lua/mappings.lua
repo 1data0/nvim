@@ -7,12 +7,17 @@ U.g.mapleader = ' '
 U.g.maplocalleader = ','
 
 wk.register({
-    ["<leader>"] = {
-        function()
-            require('telescope.builtin').buffers()
-        end,
+    ["<CR>"] = {
+        "<cmd>Buffers<cr>",
         "Switch buffers"
     },
+
+    ["<BS>"] = {
+        "<cmd>FZF<cr>",
+        "Open file"
+    }
+})
+wk.register({
     ["<leader>h"] = {
         "<C-w>h",
         "Move left pane"
@@ -80,7 +85,7 @@ wk.register({
         "create heading"
     },
     ["c"] = {
-        "<cmd>e ~/.config/nvim/init.lua<cr>",
+        "<cmd>FZF ~/.config/nvim/<cr>",
         "Edit config"
     },
     f = {
@@ -108,6 +113,15 @@ wk.register({
     },
     g = {
         name = "Git",
+        w = {
+            "<cmd>Gwrite<CR>",
+            "Add current file"
+        },
+        c = {
+            "<cmd>Git commit<CR>",
+            "Status"
+        },
+
         s = {
             "<cmd>Git<CR>",
             "Status"
@@ -135,6 +149,10 @@ wk.register({
             "Set remote"
         },
         m = {
+            "<cmd>split | resize 20 | term mr -c<CR>",
+            "Create merge request"
+        },
+        g = {
             "<cmd>split | resize 20 | term mr<CR>",
             "Get Merge Request"
         },
@@ -152,7 +170,12 @@ wk.register({
         b = {
             "<cmd>!clear; python3 %<CR>",
             "Build"
-        }
+        },
+        p = {
+            "<cmd>vsplit | term python3<CR>",
+            "Get Merge Request"
+        },
+
     }
 },
 { prefix = "<leader>" })
