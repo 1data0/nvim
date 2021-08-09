@@ -51,17 +51,32 @@ _G.s_tab_complete = function()
   end
 end
 
+function open_window()
+  buf = vim.api.nvim_create_buf(false, true)
+  local border_buf = vim.api.nvim_create_buf(false, true)
 
-local fzf = require("fzf")
-fzf_t = function()
-    coroutine.wrap(function()
-      local result = fzf.fzf({"echo hello", "pavucontrol"})
-      if result then
-        vim.fn.system(result[1])
-      end
-    end)()
+  vim.api.nvim_buf_set_option(buf, 'bufhidden', 'wipe')
+
+  local width = vim.api.nvim_get_option("columns")
+  local height = vim.api.nvim_get_option("lines")
+
+  local win_height = math.ceil(height * 0.8 - 4)
+  local win_width = math.ceil(width * 0.8)
+  local row = win_height--math.ceil((height - win_height) / 2 - 1)
+  local col = 10 --math.ceil((width - win_width) / 2)
+
+  local opts = {
+    style = "minimal",
+    relative = "editor",
+    width = win_width,
+    height = win_height,
+    row = row,
+    col = col
+  }
+    win = vim.api.nvim_open_win(buf, true, opts)
+    vim.api.nvim_win_set_option(win, 'cursorline', true) -- it highlight line with the cursor on it
+    local f = vim.api.nvim_open_term(buf, {cmd = 'fzf'})
 end
--- call fzf#run({'source': 'git ls-files', 'sink': 'e'})
 
 
 -- -- " plugin/whid.vim
@@ -160,7 +175,6 @@ end
 --   api.nvim_buf_add_highlight(buf, -1, 'whidSubHeader', 1, 0, -1)
 --   api.nvim_buf_set_option(buf, 'modifiable', false)
 -- end
-
 -- local function close_window()
 --   api.nvim_win_close(win, true)
 -- end

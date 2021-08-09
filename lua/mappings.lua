@@ -91,11 +91,13 @@ wk.register({
     f = {
         name = "File", -- optional group name
         f = {
-            "<cmd>Telescope find_files<cr>",
+            "<cmd>call fzf#run({'sink': 'e')<cr>",
             "Find File" 
         },
         r = {
-            "<cmd>Telescope oldfiles<cr>",
+            function()
+                require('telescope.builtin').find_files()
+            end,
             "Open Recent File",
             noremap=false
         },
@@ -119,7 +121,7 @@ wk.register({
         },
         c = {
             "<cmd>Git commit<CR>",
-            "Status"
+            "Commit"
         },
 
         s = {

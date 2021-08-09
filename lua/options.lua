@@ -35,6 +35,7 @@ U.o.sts = 4
 U.o.tabstop = 4 
 U.o.timeoutlen = 250
 U.o.termguicolors = true
+U.o.updatetime = 100
 U.o.undodir = U.home .. '/.config/vim-persisted-undo/'
 U.o.undofile = true
 U.o.wrap = true
